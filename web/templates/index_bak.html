@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">    
+    <link href="css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <script type="text/javascript" src="/eel.js">
+        eel.expose(mmsg)
+
+    </script>
+    <title>Bootstrap demo</title>
+</head>
+
+<body style="background-color: #9ac8db;">
+    <div class="container d-grid gap-3">
+        <!-- <h1>Hello, world!</h1> -->
+        
+        <picture style="margin-top: 20px; border: 0;">
+            <source srcset="/images/ModivCare_img.png" type="image/svg+xml">
+            <img  style="background-color: #9ac8db;" src="/images/ModivCare_img.png" class="img-fluid img-thumbnail" alt="...">
+          </picture>
+<p></p>
+<!-- <p></p> -->
+<!-- <p></p> -->
+<!-- <p></p> -->
+        <div>
+            <label for="formFileLg" class="form-label">Select *.pdf file</label>
+            <input class="form-control form-control-sm" id="formFileLg" type="file">
+        </div>
+        <div>
+            <label for="formFileLg" class="form-label">Select *.csv file</label>
+            <input class="form-control form-control-sm" id="formFileLg" type="file">
+        </div>
+        <button type="button" class="btn btn-primary btn-lg" >Convert files</button>
+        <!-- Large button groups (default and split) -->
+        <div class="btn-group">
+            <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Download files
+            </button>
+            <ul class="dropdown-menu" style="width:100%">
+                <li><a class="dropdown-item" href="#">Download *.csv, witout $0,00</a></li>
+                <li><a class="dropdown-item" href="#">Download *.pdf, with marked records</a></li>
+                <li><a class="dropdown-item" href="#">Download *.pdf, with deleted pages</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#">Download all</a></li>
+            </ul>
+        </div>
+    </div>
+    <script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script type="text/javascript" src="/eel.js"></script>
+    <script type="text/javascript">
+        eel.expose(hello_from_js);
+        function hello_from_js(text) {
+            console.log("jsf print text = " + text);
+        }
+        </script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+</head>
+
+<body>
+    <div>
+        <label for="formFileLg" class="form-label">Select *.pdf file</label>
+        <input class="form-control form-control-sm" id="formFileLg" type="file" accept="text/csv" onclick="mf()">
+        <input type="button" onclick="mf()" value="download"> 
+        
+    </div>
+    
+    <script type="text/javascript">
+        function mf(){
+            var pdf_name = document.getElementById("formFileLg").value;
+            var pdf_name = document.getElementById("formFileLg").value;
+            console.log(pdf_name);
+            eel.get_files_name(pdf_name, pdf_name)
+        }
+    </script>
+</body>
+
+</html>
