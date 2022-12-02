@@ -63,27 +63,57 @@ def prepare_pdf(file, ids):
                     hl = page.add_highlight_annot(_)
                     hl.update()
                     delete_list.append(page_number)
-            marked_doc = "marked_" + file
-            doc.save("marked_" + file)
+            # marked_doc = "marked_" + file
+            doc.save("marked_{}".format(str(file)))
+    # return marked_doc
 
-    marked_pages = set((delete_list))
-
+def hl_pdf(file, ids):
     with fitz.open(file) as doc:
-        doc.delete_pages(tuple(marked_pages))
-        deleted_doc = "deleted_" + file
-        doc.save(deleted_doc)
-    return marked_pages, marked_doc, deleted_doc
+        for page in doc:
+            for id in ids:
+                res = page.search_for(id)
+                print(res)
+                print(type(res))
+                if len(res) > 0:
+                    hl = page.add_highlight_annot(res)
+                    hl.update()
+        doc.save("marked_{}".format(str(file)))
 
+
+# Find much on page return true
+def find_id(page, ids):
+        for id in ids:
+            if len(page.search_for(id))>0:
+                # print("Find {} on {} page.".format(id, page.number))
+                return True
+        return False
+
+def remove_page(file, ids):
+    with fitz.open(file) as doc:
+        doc_pages=list(range(doc.page_count))
+        for page in doc:
+            if find_id(page, ids) or not page.get_text():
+                doc_pages.remove(page.number)
+        doc.select(doc_pages)
+        filename='deleted_{}'.format(str(file))
+        doc.save(filename)
+#         check_pdf(filename, ids) 
+
+# def check_pdf(file, ids):
+#     with fitz.open(file) as doc:
+#         for page in doc:
+#             for id in ids:
+#                 if len(page.search_for(id))>0:
+#                     print("MISS on page {page}, id: {id}".format(id, page.number))
 
 @eel.expose
 def compare_files(file_csv, file_pdf):
-    # file_csv = 'L1.csv'
-    # file_pdf = 'P1.pdf' 
     ac, m, n = get_columns_id(file_csv)
     cleared_csv = clear_lgtc_csv(file_csv, ac)
     trip_ids = get_trip_id_csv(cleared_csv, m, n)
-    prepare_pdf(file_pdf, trip_ids)
-    # print("compare_files py", file_csv, file_pdf)
+    hl_pdf(file_pdf, trip_ids)
+    remove_page(file_pdf, trip_ids)
+
 
 
 if __name__ == "__main__":
