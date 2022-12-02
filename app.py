@@ -50,30 +50,13 @@ def get_trip_id_csv(file_name, m, n):
             line_index += 1
     return trips_id
 
-
-def prepare_pdf(file, ids):
-    delete_list = []
-    page_number = 0
-    with fitz.open(file) as doc:
-        for page in doc:
-            page_number += 1
-            for id in ids:
-                page_ids = page.search_for(id)
-                for _ in page_ids:
-                    hl = page.add_highlight_annot(_)
-                    hl.update()
-                    delete_list.append(page_number)
-            # marked_doc = "marked_" + file
-            doc.save("marked_{}".format(str(file)))
-    # return marked_doc
-
 def hl_pdf(file, ids):
     with fitz.open(file) as doc:
         for page in doc:
             for id in ids:
                 res = page.search_for(id)
-                print(res)
-                print(type(res))
+                # print(res)
+                # print(type(res))
                 if len(res) > 0:
                     hl = page.add_highlight_annot(res)
                     hl.update()
