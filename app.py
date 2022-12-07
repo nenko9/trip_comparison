@@ -1,13 +1,30 @@
 import eel
 import csv
 import fitz
+from datetime import datetime
+
+
+
+
+def proc_time():
+    # t = time.localtime()
+    now = datetime.now()
+    session_time = now.strftime("%Y%M%D")
+    # current_time = time.strftime("%H%M:%S", t)
+    # print(current_time)
+    return str(session_time)
+
+
 
 def get_columns_id(file_name):
     req_fields = ('Amount', 'Trip ID', 'Trip Leg')
     line_count = 0
     column_index = 0
+    ac = 0
+    m = 0 
+    n = 0 
     with open(file_name) as file:
-        reader = csv.reader(file)
+        reader = csv.reader(file, delimiter=";")
         for line in reader:
             if line_count==0:
                 line_count += 1
@@ -28,9 +45,9 @@ def clear_lgtc_csv(file_name, ac):
     with open(file_name) as csv_file_origin:
         cleared_scv = "cleared_" + file_name
 
-        with open(cleared_scv, "w") as csv_file_cleared:
-            csv_reader = csv.reader(csv_file_origin)
-            csv_writer = csv.writer(csv_file_cleared)
+        with open(cleared_scv, "w", newline="") as csv_file_cleared:
+            csv_reader = csv.reader(csv_file_origin, delimiter=";")
+            csv_writer = csv.writer(csv_file_cleared, delimiter=";")
 
             line_index = 0
             for record in csv_reader:
@@ -42,7 +59,7 @@ def clear_lgtc_csv(file_name, ac):
 def get_trip_id_csv(file_name, m, n):
     trips_id = []
     with open(file_name) as csv_file_origin:
-        reader = csv.reader(csv_file_origin)
+        reader = csv.reader(csv_file_origin, delimiter=";")
         line_index = 0
         for line in reader:
             if line_index > 0:
@@ -50,7 +67,7 @@ def get_trip_id_csv(file_name, m, n):
             line_index += 1
     return trips_id
 
-def hl_pdf(file, ids):
+def hl_pdf(file, ids, t):
     with fitz.open(file) as doc:
         for page in doc:
             for id in ids:
@@ -60,7 +77,8 @@ def hl_pdf(file, ids):
                 if len(res) > 0:
                     hl = page.add_highlight_annot(res)
                     hl.update()
-        doc.save("marked_{}".format(str(file)))
+        
+        doc.save("marked_{}_{}".format(str(t),str(file)))
 
 
 # Find much on page return true
@@ -91,10 +109,11 @@ def remove_page(file, ids):
 
 @eel.expose
 def compare_files(file_csv, file_pdf):
+    S_TIME=proc_time()
     ac, m, n = get_columns_id(file_csv)
     cleared_csv = clear_lgtc_csv(file_csv, ac)
     trip_ids = get_trip_id_csv(cleared_csv, m, n)
-    hl_pdf(file_pdf, trip_ids)
+    hl_pdf(file_pdf, trip_ids, S_TIME)
     remove_page(file_pdf, trip_ids)
 
 
